@@ -22,6 +22,25 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        var latitude:CLLocationDegrees = 51.100115
+        
+        var longitude:CLLocationDegrees = 7.504789
+        
+        var latDelta:CLLocationDegrees = 0.005
+        
+        var lonDelta:CLLocationDegrees = 0.005
+        
+        var span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
+        
+        var location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
+        
+        var region:MKCoordinateRegion = MKCoordinateRegionMake(location, span)
+        
+        map.setRegion(region, animated: true)
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
