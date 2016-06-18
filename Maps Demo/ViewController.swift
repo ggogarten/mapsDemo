@@ -8,12 +8,14 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-
-class ViewController: UIViewController, MKMapViewDelegate {
+class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     
     @IBOutlet weak var map: MKMapView!
+    
+    var locationManager = CLLocationManager()
     
     
     
@@ -22,6 +24,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        locationManager.delegate = self
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        locationManager.startUpdatingLocation()
+        
         
         var latitude:CLLocationDegrees = 51.100115
         
@@ -77,19 +88,34 @@ class ViewController: UIViewController, MKMapViewDelegate {
         
         map.addAnnotation(annotation)
         
-        var uilpgr = UILongPressGestureRecognizer(target: self, action: "action:")
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        uilpgr.minimumPressDuration = 2
+        print(locations)
         
-        map.addGestureRecognizer(uilpgr)
-
+        var userLocation: CLLocation = locations[0]
         
+        var latitude = userLocation.coordinate.latitude
+        
+        var longitude = userLocation.coordinate.longitude
+        
+        var latDelta:CLLocationDegrees = 0.005
+        
+        var lonDelta:CLLocationDegrees = 0.005
+        
+        var span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
+        
+        var location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
+        
+        var region:MKCoordinateRegion = MKCoordinateRegionMake(location, span)
+        
+        self.map.setRegion(region, animated: true)
         
         
         
     }
-    
-    
     
     
     
